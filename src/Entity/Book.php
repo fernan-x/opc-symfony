@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
@@ -17,6 +18,11 @@ class Book
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(["getBooks", "getAuthor"])]
+    #[Assert\NotBlank(message: "Le titre du livre est obligatoire")]
+    #[Assert\Length(min: 1, max: 255,
+        minMessage: "Le titre doit faire au moins {{ limit }}",
+        maxMessage: "Le titre ne peut pas faire plus de {{ limit }} caractères")
+    ]
     private $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
